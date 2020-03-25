@@ -1,0 +1,114 @@
+<head>
+  <script src="p5.js"></script>
+  <script src="p5.dom.js"></script>
+
+
+  <!--Roba che fa funzionare il pop-up NON TOCCARE TROPPO-->
+  <!--(usa i file script.js e style.css)-->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Risk</title>
+  <link href="styles.css" rel="stylesheet">
+  <script defer src="script.js"></script>
+
+</head>
+<body>
+
+  <!--Roba che fa funzionare il pop-up NON TOCCARE TROPPO-->
+  <!--(usa i file script.js e style.css)-->
+  <button data-modal-target="#modal">Open Modal</button>
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="title">Attack!</div>
+      <button data-close-button class="close-button">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <label for="quantity1">Attacking Armies:</label>
+        <input type="number" id="quantity1" name="AttackArmy" min="1" max="3" value="3">
+      </form>
+      <form>
+        <label for="quantity2">Defending Armies:</label>
+        <input type="number" id="quantity2" name="DefendArmy" min="1" max="3" value="3">
+      </form>
+      <br>
+    </div>
+  </div>
+  <div id="overlay"></div>
+  <br>
+
+
+
+
+
+  <script>
+
+    let map;
+    let tank;
+    let states=[];
+
+    function preload() {
+      map=loadImage("risk_img/map.jpg");
+      tank=loadImage("risk_img/tank.webp");
+      tank_blue=loadImage("risk_img/tank_blue.png");
+      tank_black=loadImage("risk_img/tank_black.png");
+      tank_yellow=loadImage("risk_img/tank_yellow.png");
+      tank_purple=loadImage("risk_img/tank_purple.png");
+      tank_green=loadImage("risk_img/tank_green.png");
+      tank_red=loadImage("risk_img/tank_red.png");
+    }
+
+
+
+    function setup() {
+      createCanvas(1920, 1080);
+      states[0]= new State("red",2,200,200)
+      states[1]= new State("red",2,600,400)
+      states[2]= new State("red",2,900,300)
+    }
+
+    function draw() {
+      background(map);
+      for (let i=0; i<states.length; i++){
+          states[i].show();
+      }
+    }
+
+
+    class State{
+      constructor(colour,army,x,y){
+        this.colour=colour;
+        this.army=army;
+        this.x=x;
+        this.y=y;
+        this.brightness=0;
+      }
+      show () {
+        stroke(0);
+        strokeWeight(4);
+        fill(this.brightness,99);
+        circle(this.x,this.y,100);
+        image(tank_black, this.x-37,this.y-25,75,50);
+      }
+      click (x,y) {
+        let d = dist(x, y, this.x, this.y)
+        if(d<100){
+          this.brightness=300;
+
+        }
+      }
+    }
+
+    function mousePressed(){
+      for (let i=0; i<states.length; i++){
+          states[i].click(mouseX,mouseY);
+      }
+
+    }
+
+
+
+  </script>
+
+</body>
